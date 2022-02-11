@@ -2,7 +2,6 @@ package me.foncused.explosionregeneration.event;
 
 import me.foncused.explosionregeneration.ExplosionRegeneration;
 import me.foncused.explosionregeneration.config.ConfigManager;
-import me.foncused.explosionregeneration.lib.sk89q.WorldGuardHook;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.banner.Pattern;
@@ -26,7 +25,6 @@ public class Regeneration implements Listener {
 
     private final ExplosionRegeneration plugin;
     private final ConfigManager cm;
-    private final WorldGuardHook worldguard;
     private final List<FallingBlock> fallingBlocks;
     private final Set<UUID> entities;
     private final Map<UUID, ItemStack[]> armorStands;
@@ -37,7 +35,6 @@ public class Regeneration implements Listener {
     public Regeneration(final ExplosionRegeneration plugin) {
         this.plugin = plugin;
         this.cm = this.plugin.getConfigManager();
-        this.worldguard = this.plugin.getWorldGuard();
         this.fallingBlocks = new ArrayList<>();
         this.entities = new HashSet<>();
         this.armorStands = new HashMap<>();
@@ -90,12 +87,6 @@ public class Regeneration implements Listener {
             }
         } catch (final NullPointerException e) {
             return;
-        }
-        if (this.cm.isWorldGuard()) {
-            this.worldguard.getExplosionFiltered(list);
-            if (list.size() == 0) {
-                return;
-            }
         }
         final boolean dropsEnabled = this.cm.isDropsEnabled();
         final Set<Material> dropsBlacklist = this.cm.getDropsBlacklist();

@@ -1,2 +1,11 @@
-.idea/
 target/
+.project
+.classpath
+.settings
+.idea
+.vscode
+.gradle
+bin/
+build/
+old/
+gradle/
