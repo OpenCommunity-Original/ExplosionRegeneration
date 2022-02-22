@@ -26,7 +26,6 @@ public class ConfigManager {
 	private boolean dropsEnabled;
 	private double dropsRadius;
 	private Set<Material> dropsBlacklist;
-	private boolean worldguard;
 
 	public ConfigManager(
 		final boolean random,
@@ -42,8 +41,7 @@ public class ConfigManager {
 		final boolean entityProtection,
 		final boolean dropsEnabled,
 		final double dropsRadius,
-		final List<String> dropsBlacklist,
-		final boolean worldguard
+		final List<String> dropsBlacklist
 	) {
 		this.random = random;
 		ExplosionRenerationUtil.console(this.random ? "Random mode enabled" : "Random mode disabled");
@@ -137,8 +135,6 @@ public class ConfigManager {
 			});
 			this.dropsBlacklist = Collections.unmodifiableSet(this.dropsBlacklist);
 		}
-		this.worldguard = worldguard;
-		ExplosionRenerationUtil.console(this.worldguard ? "WorldGuard mode enabled" : "WorldGuard mode disabled");
 	}
 
 	public boolean isRandom() {
@@ -199,10 +195,6 @@ public class ConfigManager {
 
 	public Set<Material> getDropsBlacklist() {
 		return this.dropsBlacklist;
-	}
-
-	public boolean isWorldGuard() {
-		return this.worldguard;
 	}
 
 }

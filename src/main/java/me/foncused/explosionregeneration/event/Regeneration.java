@@ -9,6 +9,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -137,7 +138,7 @@ public class Regeneration implements Listener {
                     world.getEntitiesByClass(Item.class)
                             .stream()
                             .filter(item -> item.getLocation().distance(location) <= distance
-                                    && item.getType() == EntityType.DROPPED_ITEM
+                                    && item.getType() == EntityType.CREEPER
                                     && dropsBlacklist.contains(item.getItemStack().getType()))
                             .forEach(Entity::remove);
                 }
@@ -150,7 +151,7 @@ public class Regeneration implements Listener {
                     world.getEntitiesByClass(Item.class)
                             .stream()
                             .filter(item -> item.getLocation().distance(location) <= distance
-                                    && item.getType() == EntityType.DROPPED_ITEM)
+                                    && item.getType() == EntityType.CREEPER)
                             .forEach(Entity::remove);
                 }
             }.runTaskLater(this.plugin, 1);
@@ -538,13 +539,13 @@ public class Regeneration implements Listener {
         list.forEach(block -> block.setType(Material.AIR));
     }
 
-	/*@EventHandler
+	@EventHandler
 	public void onBlockExplode(final BlockExplodeEvent event) {
 		if(!(this.cm.isDropsEnabled())) {
 			event.setYield(0F);
 		}
 		this.regenerate(event.blockList(), event.getBlock().getLocation());
-	}*/
+	}
 
     @EventHandler
     public void onEntityExplode(final EntityExplodeEvent e) {
@@ -567,7 +568,7 @@ public class Regeneration implements Listener {
         }
     }
 
-    /*@EventHandler
+    @EventHandler
     public void onEntityDamage(final EntityDamageEvent event) {
         if (this.cm.isEntityProtection()) {
             final EntityDamageEvent.DamageCause cause = event.getCause();
@@ -597,9 +598,9 @@ public class Regeneration implements Listener {
                 }
             }
         }
-    }*/
+    }
 
-    /*@EventHandler
+    @EventHandler
     public void onHangingBreak(final HangingBreakEvent event) {
         if (this.cm.isEntityProtection() && event.getCause() == HangingBreakEvent.RemoveCause.EXPLOSION) {
             final Entity entity = event.getEntity();
@@ -635,7 +636,7 @@ public class Regeneration implements Listener {
                 }
             }
         }
-    }*/
+    }
 
 }
 
