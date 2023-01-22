@@ -173,109 +173,30 @@ public class Regeneration implements Listener {
             );
             Container container = null;
             switch (material) {
-                case ACACIA_SIGN:
-                case ACACIA_WALL_SIGN:
-                case BIRCH_SIGN:
-                case BIRCH_WALL_SIGN:
-                case DARK_OAK_SIGN:
-                case DARK_OAK_WALL_SIGN:
-                case JUNGLE_SIGN:
-                case JUNGLE_WALL_SIGN:
-                case OAK_SIGN:
-                case OAK_WALL_SIGN:
-                case SPRUCE_SIGN:
-                case SPRUCE_WALL_SIGN:
-                    cache.setSignLines(((Sign) state).getLines());
-                    break;
-                case BLACK_BANNER:
-                case BLACK_WALL_BANNER:
-                case BLUE_BANNER:
-                case BLUE_WALL_BANNER:
-                case BROWN_BANNER:
-                case BROWN_WALL_BANNER:
-                case CYAN_BANNER:
-                case CYAN_WALL_BANNER:
-                case GRAY_BANNER:
-                case GRAY_WALL_BANNER:
-                case GREEN_BANNER:
-                case GREEN_WALL_BANNER:
-                case LIGHT_BLUE_BANNER:
-                case LIGHT_BLUE_WALL_BANNER:
-                case LIGHT_GRAY_BANNER:
-                case LIGHT_GRAY_WALL_BANNER:
-                case LIME_BANNER:
-                case LIME_WALL_BANNER:
-                case MAGENTA_BANNER:
-                case MAGENTA_WALL_BANNER:
-                case ORANGE_BANNER:
-                case ORANGE_WALL_BANNER:
-                case PINK_BANNER:
-                case PINK_WALL_BANNER:
-                case PURPLE_BANNER:
-                case PURPLE_WALL_BANNER:
-                case RED_BANNER:
-                case RED_WALL_BANNER:
-                case WHITE_BANNER:
-                case WHITE_WALL_BANNER:
-                case YELLOW_BANNER:
-                case YELLOW_WALL_BANNER:
+                case ACACIA_SIGN, ACACIA_WALL_SIGN, BIRCH_SIGN, BIRCH_WALL_SIGN, DARK_OAK_SIGN, DARK_OAK_WALL_SIGN, JUNGLE_SIGN, JUNGLE_WALL_SIGN, OAK_SIGN, OAK_WALL_SIGN, SPRUCE_SIGN, SPRUCE_WALL_SIGN ->
+                        cache.setSignLines(((Sign) state).getLines());
+                case BLACK_BANNER, BLACK_WALL_BANNER, BLUE_BANNER, BLUE_WALL_BANNER, BROWN_BANNER, BROWN_WALL_BANNER, CYAN_BANNER, CYAN_WALL_BANNER, GRAY_BANNER, GRAY_WALL_BANNER, GREEN_BANNER, GREEN_WALL_BANNER, LIGHT_BLUE_BANNER, LIGHT_BLUE_WALL_BANNER, LIGHT_GRAY_BANNER, LIGHT_GRAY_WALL_BANNER, LIME_BANNER, LIME_WALL_BANNER, MAGENTA_BANNER, MAGENTA_WALL_BANNER, ORANGE_BANNER, ORANGE_WALL_BANNER, PINK_BANNER, PINK_WALL_BANNER, PURPLE_BANNER, PURPLE_WALL_BANNER, RED_BANNER, RED_WALL_BANNER, WHITE_BANNER, WHITE_WALL_BANNER, YELLOW_BANNER, YELLOW_WALL_BANNER -> {
                     final Banner banner = (Banner) state;
                     cache.setDyeColor(banner.getBaseColor());
                     cache.setPatterns(banner.getPatterns());
-                    break;
-                case LECTERN:
+                }
+                case LECTERN -> {
                     final Lectern lectern = (Lectern) state;
                     final Inventory inventory = lectern.getInventory();
                     cache.setInventory(inventory.getContents());
                     inventories.add(inventory);
-                    break;
-                case CHEST:
-                case TRAPPED_CHEST:
-                    container = (Chest) state;
-                    break;
-                case BLACK_SHULKER_BOX:
-                case BLUE_SHULKER_BOX:
-                case BROWN_SHULKER_BOX:
-                case CYAN_SHULKER_BOX:
-                case GRAY_SHULKER_BOX:
-                case GREEN_SHULKER_BOX:
-                case LIGHT_BLUE_SHULKER_BOX:
-                case LIGHT_GRAY_SHULKER_BOX:
-                case LIME_SHULKER_BOX:
-                case MAGENTA_SHULKER_BOX:
-                case ORANGE_SHULKER_BOX:
-                case PINK_SHULKER_BOX:
-                case PURPLE_SHULKER_BOX:
-                case RED_SHULKER_BOX:
-                case SHULKER_BOX:
-                case WHITE_SHULKER_BOX:
-                case YELLOW_SHULKER_BOX:
-                    container = (ShulkerBox) state;
-                    break;
-                case FURNACE:
-                    container = (Furnace) state;
-                    break;
-                case HOPPER:
-                    container = (Hopper) state;
-                    break;
-                case DROPPER:
-                    container = (Dropper) state;
-                    break;
-                case DISPENSER:
-                    container = (Dispenser) state;
-                    break;
-                case BREWING_STAND:
-                    container = (BrewingStand) state;
-                    break;
-                case BARREL:
-                    container = (Barrel) state;
-                    break;
-                case BLAST_FURNACE:
-                    container = (BlastFurnace) state;
-                    break;
-                case SMOKER:
-                    container = (Smoker) state;
-                    break;
+                }
+                case CHEST, TRAPPED_CHEST -> container = (Chest) state;
+                case BLACK_SHULKER_BOX, BLUE_SHULKER_BOX, BROWN_SHULKER_BOX, CYAN_SHULKER_BOX, GRAY_SHULKER_BOX, GREEN_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, LIME_SHULKER_BOX, MAGENTA_SHULKER_BOX, ORANGE_SHULKER_BOX, PINK_SHULKER_BOX, PURPLE_SHULKER_BOX, RED_SHULKER_BOX, SHULKER_BOX, WHITE_SHULKER_BOX, YELLOW_SHULKER_BOX ->
+                        container = (ShulkerBox) state;
+                case FURNACE -> container = (Furnace) state;
+                case HOPPER -> container = (Hopper) state;
+                case DROPPER -> container = (Dropper) state;
+                case DISPENSER -> container = (Dispenser) state;
+                case BREWING_STAND -> container = (BrewingStand) state;
+                case BARREL -> container = (Barrel) state;
+                case BLAST_FURNACE -> container = (BlastFurnace) state;
+                case SMOKER -> container = (Smoker) state;
             }
             if (container != null) {
                 final Inventory inventory = container.getInventory();
@@ -302,58 +223,22 @@ public class Regeneration implements Listener {
                             final BlockState state = cache.getBlockState();
                             Container container = null;
                             switch (material) {
-                                case LECTERN:
+                                case LECTERN -> {
                                     final Lectern lectern = (Lectern) state;
                                     lectern.getInventory().setContents(cache.getInventory());
                                     lectern.update(true);
-                                    break;
-                                case CHEST:
-                                case TRAPPED_CHEST:
-                                    container = (Chest) state;
-                                    break;
-                                case SHULKER_BOX:
-                                case BLACK_SHULKER_BOX:
-                                case BROWN_SHULKER_BOX:
-                                case BLUE_SHULKER_BOX:
-                                case CYAN_SHULKER_BOX:
-                                case GRAY_SHULKER_BOX:
-                                case LIGHT_BLUE_SHULKER_BOX:
-                                case GREEN_SHULKER_BOX:
-                                case LIGHT_GRAY_SHULKER_BOX:
-                                case LIME_SHULKER_BOX:
-                                case MAGENTA_SHULKER_BOX:
-                                case ORANGE_SHULKER_BOX:
-                                case PINK_SHULKER_BOX:
-                                case PURPLE_SHULKER_BOX:
-                                case RED_SHULKER_BOX:
-                                case YELLOW_SHULKER_BOX:
-                                case WHITE_SHULKER_BOX:
-                                    container = (ShulkerBox) state;
-                                    break;
-                                case FURNACE:
-                                    container = (Furnace) state;
-                                    break;
-                                case HOPPER:
-                                    container = (Hopper) state;
-                                    break;
-                                case DROPPER:
-                                    container = (Dropper) state;
-                                    break;
-                                case DISPENSER:
-                                    container = (Dispenser) state;
-                                    break;
-                                case BREWING_STAND:
-                                    container = (BrewingStand) state;
-                                    break;
-                                case BARREL:
-                                    container = (Barrel) state;
-                                    break;
-                                case BLAST_FURNACE:
-                                    container = (BlastFurnace) state;
-                                    break;
-                                case SMOKER:
-                                    container = (Smoker) state;
-                                    break;
+                                }
+                                case CHEST, TRAPPED_CHEST -> container = (Chest) state;
+                                case SHULKER_BOX, BLACK_SHULKER_BOX, BROWN_SHULKER_BOX, BLUE_SHULKER_BOX, CYAN_SHULKER_BOX, GRAY_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, GREEN_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, LIME_SHULKER_BOX, MAGENTA_SHULKER_BOX, ORANGE_SHULKER_BOX, PINK_SHULKER_BOX, PURPLE_SHULKER_BOX, RED_SHULKER_BOX, YELLOW_SHULKER_BOX, WHITE_SHULKER_BOX ->
+                                        container = (ShulkerBox) state;
+                                case FURNACE -> container = (Furnace) state;
+                                case HOPPER -> container = (Hopper) state;
+                                case DROPPER -> container = (Dropper) state;
+                                case DISPENSER -> container = (Dispenser) state;
+                                case BREWING_STAND -> container = (BrewingStand) state;
+                                case BARREL -> container = (Barrel) state;
+                                case BLAST_FURNACE -> container = (BlastFurnace) state;
+                                case SMOKER -> container = (Smoker) state;
                             }
                             if (container != null) {
                                 try {
@@ -377,7 +262,7 @@ public class Regeneration implements Listener {
                                     final Location location = entity.getLocation();
                                     final EntityType type = entity.getType();
                                     switch (type) {
-                                        case ARMOR_STAND:
+                                        case ARMOR_STAND -> {
                                             final ArmorStand stand = ((ArmorStand) world.spawnEntity(location, type));
                                             stand.setGravity(false);
                                             new BukkitRunnable() {
@@ -393,8 +278,8 @@ public class Regeneration implements Listener {
                                                 armorStands.remove(uuid);
                                                 stand.getEquipment().setArmorContents(armor);
                                             }
-                                            break;
-                                        case ITEM_FRAME:
+                                        }
+                                        case ITEM_FRAME -> {
                                             final ItemFrameCache cache = itemFrames.get(uuid);
                                             if (cache != null) {
                                                 itemFrames.remove(uuid);
@@ -408,8 +293,8 @@ public class Regeneration implements Listener {
                                                     }
                                                 }
                                             }
-                                            break;
-                                        case PAINTING:
+                                        }
+                                        case PAINTING -> {
                                             final Art art = paintings.get(uuid);
                                             if (art != null) {
                                                 paintings.remove(uuid);
@@ -425,8 +310,8 @@ public class Regeneration implements Listener {
                                                     }
                                                 }
                                             }
-                                            break;
-                                        default:
+                                        }
+                                        default -> {
                                             try {
                                                 world.spawnEntity(location, type);
                                             } catch (final IllegalArgumentException e) {
@@ -434,7 +319,7 @@ public class Regeneration implements Listener {
                                                     throw e;
                                                 }
                                             }
-                                            break;
+                                        }
                                     }
                                 }
                             });
@@ -462,18 +347,7 @@ public class Regeneration implements Listener {
                     replace.setBlockData(data);
                     final BlockState state = cache.getBlockState();
                     switch (material) {
-                        case ACACIA_SIGN:
-                        case ACACIA_WALL_SIGN:
-                        case BIRCH_SIGN:
-                        case BIRCH_WALL_SIGN:
-                        case DARK_OAK_SIGN:
-                        case DARK_OAK_WALL_SIGN:
-                        case JUNGLE_SIGN:
-                        case JUNGLE_WALL_SIGN:
-                        case OAK_SIGN:
-                        case OAK_WALL_SIGN:
-                        case SPRUCE_SIGN:
-                        case SPRUCE_WALL_SIGN:
+                        case ACACIA_SIGN, ACACIA_WALL_SIGN, BIRCH_SIGN, BIRCH_WALL_SIGN, DARK_OAK_SIGN, DARK_OAK_WALL_SIGN, JUNGLE_SIGN, JUNGLE_WALL_SIGN, OAK_SIGN, OAK_WALL_SIGN, SPRUCE_SIGN, SPRUCE_WALL_SIGN -> {
                             final Sign sign = (Sign) state;
                             final String[] lines = cache.getSignLines();
                             sign.setLine(0, lines[0]);
@@ -481,44 +355,13 @@ public class Regeneration implements Listener {
                             sign.setLine(2, lines[2]);
                             sign.setLine(3, lines[3]);
                             sign.update();
-                            break;
-                        case BLACK_BANNER:
-                        case BLACK_WALL_BANNER:
-                        case BLUE_BANNER:
-                        case BLUE_WALL_BANNER:
-                        case BROWN_BANNER:
-                        case BROWN_WALL_BANNER:
-                        case CYAN_BANNER:
-                        case CYAN_WALL_BANNER:
-                        case GRAY_BANNER:
-                        case GRAY_WALL_BANNER:
-                        case GREEN_BANNER:
-                        case GREEN_WALL_BANNER:
-                        case LIGHT_BLUE_BANNER:
-                        case LIGHT_BLUE_WALL_BANNER:
-                        case LIGHT_GRAY_BANNER:
-                        case LIGHT_GRAY_WALL_BANNER:
-                        case LIME_BANNER:
-                        case LIME_WALL_BANNER:
-                        case MAGENTA_BANNER:
-                        case MAGENTA_WALL_BANNER:
-                        case ORANGE_BANNER:
-                        case ORANGE_WALL_BANNER:
-                        case PINK_BANNER:
-                        case PINK_WALL_BANNER:
-                        case PURPLE_BANNER:
-                        case PURPLE_WALL_BANNER:
-                        case RED_BANNER:
-                        case RED_WALL_BANNER:
-                        case WHITE_BANNER:
-                        case WHITE_WALL_BANNER:
-                        case YELLOW_BANNER:
-                        case YELLOW_WALL_BANNER:
+                        }
+                        case BLACK_BANNER, BLACK_WALL_BANNER, BLUE_BANNER, BLUE_WALL_BANNER, BROWN_BANNER, BROWN_WALL_BANNER, CYAN_BANNER, CYAN_WALL_BANNER, GRAY_BANNER, GRAY_WALL_BANNER, GREEN_BANNER, GREEN_WALL_BANNER, LIGHT_BLUE_BANNER, LIGHT_BLUE_WALL_BANNER, LIGHT_GRAY_BANNER, LIGHT_GRAY_WALL_BANNER, LIME_BANNER, LIME_WALL_BANNER, MAGENTA_BANNER, MAGENTA_WALL_BANNER, ORANGE_BANNER, ORANGE_WALL_BANNER, PINK_BANNER, PINK_WALL_BANNER, PURPLE_BANNER, PURPLE_WALL_BANNER, RED_BANNER, RED_WALL_BANNER, WHITE_BANNER, WHITE_WALL_BANNER, YELLOW_BANNER, YELLOW_WALL_BANNER -> {
                             final Banner banner = (Banner) state;
                             banner.setBaseColor(cache.getDyeColor());
                             banner.setPatterns(cache.getPatterns());
                             banner.update(true);
-                            break;
+                        }
                     }
                     world.playEffect(l, Effect.STEP_SOUND, material == Material.AIR ? block.getType() : material);
                     final Sound sound = cm.getSound();
@@ -539,13 +382,13 @@ public class Regeneration implements Listener {
         list.forEach(block -> block.setType(Material.AIR));
     }
 
-	@EventHandler
-	public void onBlockExplode(final BlockExplodeEvent event) {
-		if(!(this.cm.isDropsEnabled())) {
-			event.setYield(0F);
-		}
-		this.regenerate(event.blockList(), event.getBlock().getLocation());
-	}
+    @EventHandler
+    public void onBlockExplode(final BlockExplodeEvent event) {
+        if (!(this.cm.isDropsEnabled())) {
+            event.setYield(0F);
+        }
+        this.regenerate(event.blockList(), event.getBlock().getLocation());
+    }
 
     @EventHandler
     public void onEntityExplode(final EntityExplodeEvent e) {
@@ -642,11 +485,11 @@ public class Regeneration implements Listener {
 
 class ExplosionCache {
 
-    private Material material;
-    private Location location;
-    private BlockData data;
+    private final Material material;
+    private final Location location;
+    private final BlockData data;
     private String[] sign;
-    private BlockState state;
+    private final BlockState state;
     private ItemStack[] inventory;
     private DyeColor color;
     private List<Pattern> patterns;
@@ -679,24 +522,12 @@ class ExplosionCache {
         return this.material;
     }
 
-    void setMaterial(final Material material) {
-        this.material = material;
-    }
-
     Location getLocation() {
         return this.location;
     }
 
-    void setLocation(final Location location) {
-        this.location = location;
-    }
-
     BlockData getBlockData() {
         return this.data;
-    }
-
-    void setBlockData(final BlockData data) {
-        this.data = data;
     }
 
     String[] getSignLines() {
@@ -709,10 +540,6 @@ class ExplosionCache {
 
     BlockState getBlockState() {
         return this.state;
-    }
-
-    void setBlockState(final BlockState state) {
-        this.state = state;
     }
 
     ItemStack[] getInventory() {
@@ -743,8 +570,8 @@ class ExplosionCache {
 
 class ItemFrameCache {
 
-    private ItemStack stack;
-    private Rotation rotation;
+    private final ItemStack stack;
+    private final Rotation rotation;
 
     ItemFrameCache(
             final ItemStack stack,
@@ -758,16 +585,8 @@ class ItemFrameCache {
         return this.stack;
     }
 
-    void setItem(final ItemStack stack) {
-        this.stack = stack;
-    }
-
     Rotation getRotation() {
         return this.rotation;
-    }
-
-    void setRotation(final Rotation rotation) {
-        this.rotation = rotation;
     }
 
 }

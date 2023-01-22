@@ -1,5 +1,3 @@
-# @plugin ExplosionRegeneration
-
 # Do you want blocks to regenerate in random order?
 # true -> regeneration will occur in random order
 # false -> regeneration will occur from bottom to top (fixes gravel, sand, etc. better)
@@ -35,7 +33,8 @@ filter:
 
 # In which worlds should ExplosionRegeneration NOT regenerate blocks?
 blacklist:
-  - ""
+  - "world_nether"
+  - "world_the_end"
 
 # Entity protection (Armor Stands, Item Frames, Paintings)
 entity-protection: false
