@@ -22,6 +22,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Comparator;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Regeneration implements Listener {
 
@@ -33,6 +34,19 @@ public class Regeneration implements Listener {
     private final Map<UUID, ItemFrameCache> itemFrames;
     private final Map<UUID, Art> paintings;
     private int time;
+
+    // auto build material lists for signs, banners and shulkers
+    List<Material> signs = Arrays.stream(Material.values())
+            .filter(mat -> mat.name().endsWith("SIGN"))
+            .collect(Collectors.toList());
+
+    List<Material> banners = Arrays.stream(Material.values())
+            .filter(mat -> mat.name().endsWith("BANNER"))
+            .collect(Collectors.toList());
+
+    List<Material> shulkerBoxes = Arrays.stream(Material.values())
+            .filter(mat -> mat.name().endsWith("SHULKER_BOX"))
+            .collect(Collectors.toList());
 
     public Regeneration(final ExplosionRegeneration plugin) {
         this.plugin = plugin;
@@ -173,32 +187,23 @@ public class Regeneration implements Listener {
                     state
             );
             Container container = null;
-            switch (material) {
-                case ACACIA_SIGN, ACACIA_WALL_SIGN, BIRCH_SIGN, BIRCH_WALL_SIGN, DARK_OAK_SIGN, DARK_OAK_WALL_SIGN, JUNGLE_SIGN, JUNGLE_WALL_SIGN, OAK_SIGN, OAK_WALL_SIGN, SPRUCE_SIGN, SPRUCE_WALL_SIGN ->
-                        cache.setSignLines(((Sign) state).lines());
-                case BLACK_BANNER, BLACK_WALL_BANNER, BLUE_BANNER, BLUE_WALL_BANNER, BROWN_BANNER, BROWN_WALL_BANNER, CYAN_BANNER, CYAN_WALL_BANNER, GRAY_BANNER, GRAY_WALL_BANNER, GREEN_BANNER, GREEN_WALL_BANNER, LIGHT_BLUE_BANNER, LIGHT_BLUE_WALL_BANNER, LIGHT_GRAY_BANNER, LIGHT_GRAY_WALL_BANNER, LIME_BANNER, LIME_WALL_BANNER, MAGENTA_BANNER, MAGENTA_WALL_BANNER, ORANGE_BANNER, ORANGE_WALL_BANNER, PINK_BANNER, PINK_WALL_BANNER, PURPLE_BANNER, PURPLE_WALL_BANNER, RED_BANNER, RED_WALL_BANNER, WHITE_BANNER, WHITE_WALL_BANNER, YELLOW_BANNER, YELLOW_WALL_BANNER -> {
-                    final Banner banner = (Banner) state;
-                    cache.setDyeColor(banner.getBaseColor());
-                    cache.setPatterns(banner.getPatterns());
-                }
-                case LECTERN -> {
-                    final Lectern lectern = (Lectern) state;
-                    final Inventory inventory = lectern.getInventory();
-                    cache.setInventory(inventory.getContents());
-                    inventories.add(inventory);
-                }
-                case CHEST, TRAPPED_CHEST -> container = (Chest) state;
-                case BLACK_SHULKER_BOX, BLUE_SHULKER_BOX, BROWN_SHULKER_BOX, CYAN_SHULKER_BOX, GRAY_SHULKER_BOX, GREEN_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, LIME_SHULKER_BOX, MAGENTA_SHULKER_BOX, ORANGE_SHULKER_BOX, PINK_SHULKER_BOX, PURPLE_SHULKER_BOX, RED_SHULKER_BOX, SHULKER_BOX, WHITE_SHULKER_BOX, YELLOW_SHULKER_BOX ->
-                        container = (ShulkerBox) state;
-                case FURNACE -> container = (Furnace) state;
-                case HOPPER -> container = (Hopper) state;
-                case DROPPER -> container = (Dropper) state;
-                case DISPENSER -> container = (Dispenser) state;
-                case BREWING_STAND -> container = (BrewingStand) state;
-                case BARREL -> container = (Barrel) state;
-                case BLAST_FURNACE -> container = (BlastFurnace) state;
-                case SMOKER -> container = (Smoker) state;
+            if (signs.contains(material)) {
+                cache.setSignLines(((Sign) state).lines());
+            } else if (banners.contains(material)) {
+                final Banner banner = (Banner) state;
+                cache.setDyeColor(banner.getBaseColor());
+                cache.setPatterns(banner.getPatterns());
+            } else if (material == Material.LECTERN) {
+                final Lectern lectern = (Lectern) state;
+                final Inventory inventory = lectern.getInventory();
+                cache.setInventory(inventory.getContents());
+                inventories.add(inventory);
+            } else if (material == Material.CHEST || material == Material.TRAPPED_CHEST) {
+                container = (Chest) state;
+            } else if (shulkerBoxes.contains(material)) {
+                container = (ShulkerBox) state;
             }
+
             if (container != null) {
                 final Inventory inventory = container.getInventory();
                 cache.setInventory(inventory.getContents());
@@ -223,23 +228,30 @@ public class Regeneration implements Listener {
                             final Material material = cache.getMaterial();
                             final BlockState state = cache.getBlockState();
                             Container container = null;
-                            switch (material) {
-                                case LECTERN -> {
-                                    final Lectern lectern = (Lectern) state;
-                                    lectern.getInventory().setContents(cache.getInventory());
-                                    lectern.update(true);
-                                }
-                                case CHEST, TRAPPED_CHEST -> container = (Chest) state;
-                                case SHULKER_BOX, BLACK_SHULKER_BOX, BROWN_SHULKER_BOX, BLUE_SHULKER_BOX, CYAN_SHULKER_BOX, GRAY_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, GREEN_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, LIME_SHULKER_BOX, MAGENTA_SHULKER_BOX, ORANGE_SHULKER_BOX, PINK_SHULKER_BOX, PURPLE_SHULKER_BOX, RED_SHULKER_BOX, YELLOW_SHULKER_BOX, WHITE_SHULKER_BOX ->
-                                        container = (ShulkerBox) state;
-                                case FURNACE -> container = (Furnace) state;
-                                case HOPPER -> container = (Hopper) state;
-                                case DROPPER -> container = (Dropper) state;
-                                case DISPENSER -> container = (Dispenser) state;
-                                case BREWING_STAND -> container = (BrewingStand) state;
-                                case BARREL -> container = (Barrel) state;
-                                case BLAST_FURNACE -> container = (BlastFurnace) state;
-                                case SMOKER -> container = (Smoker) state;
+                            if (material == Material.LECTERN) {
+                                final Lectern lectern = (Lectern) state;
+                                lectern.getInventory().setContents(cache.getInventory());
+                                lectern.update(true);
+                            } else if (material == Material.CHEST || material == Material.TRAPPED_CHEST) {
+                                container = (Chest) state;
+                            } else if (shulkerBoxes.contains(material)) {
+                                container = (ShulkerBox) state;
+                            } else if (material == Material.FURNACE) {
+                                container = (Furnace) state;
+                            } else if (material == Material.HOPPER) {
+                                container = (Hopper) state;
+                            } else if (material == Material.DROPPER) {
+                                container = (Dropper) state;
+                            } else if (material == Material.DISPENSER) {
+                                container = (Dispenser) state;
+                            } else if (material == Material.BREWING_STAND) {
+                                container = (BrewingStand) state;
+                            } else if (material == Material.BARREL) {
+                                container = (Barrel) state;
+                            } else if (material == Material.BLAST_FURNACE) {
+                                container = (BlastFurnace) state;
+                            } else if (material == Material.SMOKER) {
+                                container = (Smoker) state;
                             }
                             if (container != null) {
                                 try {
@@ -347,21 +359,19 @@ public class Regeneration implements Listener {
                     replace.setType(material);
                     replace.setBlockData(data);
                     final BlockState state = cache.getBlockState();
-                    switch (material) {
-                        case ACACIA_SIGN, ACACIA_WALL_SIGN, BIRCH_SIGN, BIRCH_WALL_SIGN, DARK_OAK_SIGN, DARK_OAK_WALL_SIGN, JUNGLE_SIGN, JUNGLE_WALL_SIGN, OAK_SIGN, OAK_WALL_SIGN, SPRUCE_SIGN, SPRUCE_WALL_SIGN -> {
-                            final Sign sign = (Sign) state;
-                            final List<Component> lines = cache.getSignLines();
-                            for (Component line : lines) {
-                                sign.line(lines.indexOf(line), line);
-                            }
-                            sign.update();
+                    if (signs.contains(material)) {
+                        final Sign sign = (Sign) state;
+                        final List<Component> lines = cache.getSignLines();
+                        for (Component line : lines) {
+                            sign.line(lines.indexOf(line), line);
                         }
-                        case BLACK_BANNER, BLACK_WALL_BANNER, BLUE_BANNER, BLUE_WALL_BANNER, BROWN_BANNER, BROWN_WALL_BANNER, CYAN_BANNER, CYAN_WALL_BANNER, GRAY_BANNER, GRAY_WALL_BANNER, GREEN_BANNER, GREEN_WALL_BANNER, LIGHT_BLUE_BANNER, LIGHT_BLUE_WALL_BANNER, LIGHT_GRAY_BANNER, LIGHT_GRAY_WALL_BANNER, LIME_BANNER, LIME_WALL_BANNER, MAGENTA_BANNER, MAGENTA_WALL_BANNER, ORANGE_BANNER, ORANGE_WALL_BANNER, PINK_BANNER, PINK_WALL_BANNER, PURPLE_BANNER, PURPLE_WALL_BANNER, RED_BANNER, RED_WALL_BANNER, WHITE_BANNER, WHITE_WALL_BANNER, YELLOW_BANNER, YELLOW_WALL_BANNER -> {
-                            final Banner banner = (Banner) state;
-                            banner.setBaseColor(cache.getDyeColor());
-                            banner.setPatterns(cache.getPatterns());
-                            banner.update(true);
-                        }
+                        sign.update();
+                    }
+                    if (banners.contains(material)) {
+                        final Banner banner = (Banner) state;
+                        banner.setBaseColor(cache.getDyeColor());
+                        banner.setPatterns(cache.getPatterns());
+                        banner.update(true);
                     }
                     world.playEffect(l, Effect.STEP_SOUND, material == Material.AIR ? block.getType() : material);
                     final Sound sound = cm.getSound();

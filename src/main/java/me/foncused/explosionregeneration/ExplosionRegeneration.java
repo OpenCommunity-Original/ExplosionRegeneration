@@ -54,4 +54,8 @@ public class ExplosionRegeneration extends JavaPlugin {
         return this.cm;
     }
 
+    @Override
+    public void onDisable() {
+    }
+
 }
