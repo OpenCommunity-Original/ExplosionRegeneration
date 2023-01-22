@@ -46,7 +46,7 @@ drops:
   # Radius outward from explosion to check for item drop removal
   radius: 6.0
   # If enabled is set to true, the following items will still be removed
-  # If enabled is set to false, the blacklist below is irrelevant
+  # If enabled is set to false, the following items will be dropped
   blacklist:
     - "ARMOR_STAND"
     - "BARREL"

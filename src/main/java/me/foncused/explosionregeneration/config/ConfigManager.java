@@ -43,21 +43,18 @@ public class ConfigManager {
             final List<String> dropsBlacklist
     ) {
         this.random = random;
-        ExplosionRenerationUtil.console(this.random ? "Random mode enabled" : "Random mode disabled");
         if (speed <= 0) {
             this.speed = 10;
             ExplosionRenerationUtil.consoleWarning("Set speed to " + speed + " ticks is not safe, reverting to default...");
         } else {
             this.speed = speed;
         }
-        ExplosionRenerationUtil.console("Set speed to " + this.speed + " ticks");
         if (delay < 0) {
             this.delay = 0;
             ExplosionRenerationUtil.consoleWarning("Set delay to " + delay + " ticks is not safe, reverting to default...");
         } else {
             this.delay = delay;
         }
-        ExplosionRenerationUtil.console("Set delay to " + this.delay + " ticks");
         try {
             if (particle.equals("")) {
                 particle = null;
@@ -68,7 +65,6 @@ public class ConfigManager {
             this.particle = Particle.VILLAGER_HAPPY;
             ExplosionRenerationUtil.consoleWarning("Set particle to " + particle + " is not safe, reverting to default...");
         }
-        ExplosionRenerationUtil.console(particle == null ? "Disabled particle" : "Set particle to " + this.particle.toString());
         try {
             if (sound.isEmpty()) {
                 sound = null;
@@ -79,9 +75,7 @@ public class ConfigManager {
             this.sound = Sound.ENTITY_CHICKEN_EGG;
             ExplosionRenerationUtil.consoleWarning("Set sound to " + sound + " is not safe, reverting to default...");
         }
-        ExplosionRenerationUtil.console(sound == null ? "Disabled sound" : "Set sound to " + this.sound.toString());
         this.tntChainingEnabled = tntChainingEnabled;
-        ExplosionRenerationUtil.console(this.tntChainingEnabled ? "Chaining mode enabled" : "Chaining mode disabled");
         if (this.tntChainingEnabled) {
 			int tntChainingMaxFuseTicks1;
 			if (tntChainingMaxFuseTicks <= 0 || tntChainingMaxFuseTicks > 200) {
@@ -90,10 +84,8 @@ public class ConfigManager {
             } else {
                 tntChainingMaxFuseTicks1 = tntChainingMaxFuseTicks;
             }
-            ExplosionRenerationUtil.console("Set chaining max fuse ticks to " + tntChainingMaxFuseTicks1 + " ticks");
         }
         this.fallingBlocks = fallingBlocks;
-        ExplosionRenerationUtil.console(this.fallingBlocks ? "Falling blocks enabled" : "Falling blocks disabled");
         this.filter = new HashSet<>();
         filter.forEach(material -> {
             Material m;
@@ -104,23 +96,19 @@ public class ConfigManager {
                 m = Material.FIRE;
             }
             this.filter.add(m);
-            ExplosionRenerationUtil.console("Material " + m + " is filtered from regeneration");
         });
         this.filter = Collections.unmodifiableSet(this.filter);
         this.blacklist = new HashSet<>();
         this.blacklist.addAll(blacklist);
         this.blacklist = Collections.unmodifiableSet(this.blacklist);
         this.entityProtection = entityProtection;
-        ExplosionRenerationUtil.console(this.entityProtection ? "Entities protected" : "Entities unprotected");
         this.dropsEnabled = dropsEnabled;
-        ExplosionRenerationUtil.console(this.dropsEnabled ? "Drops enabled" : "Drops disabled");
         if (dropsRadius < 0.0) {
             this.dropsRadius = 4.0;
             ExplosionRenerationUtil.consoleWarning("Set drops radius to " + dropsRadius + " is not safe, reverting to default...");
         } else {
             this.dropsRadius = dropsRadius;
         }
-        ExplosionRenerationUtil.console("Set drops radius to " + this.dropsRadius);
         if (this.dropsEnabled) {
             this.dropsBlacklist = new HashSet<>();
             dropsBlacklist.forEach(material -> {
@@ -128,7 +116,6 @@ public class ConfigManager {
                 try {
                     m = Material.valueOf(material.toUpperCase());
                     this.dropsBlacklist.add(m);
-                    ExplosionRenerationUtil.console("Material " + m + " is filtered from item drops");
                 } catch (final IllegalArgumentException e) {
                     ExplosionRenerationUtil.consoleWarning("Material " + material + " is invalid, skipping...");
                 }

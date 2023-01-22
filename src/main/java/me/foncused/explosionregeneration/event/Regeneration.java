@@ -7,8 +7,10 @@ import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.Door;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
@@ -25,7 +27,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Regeneration implements Listener {
-
     private final ExplosionRegeneration plugin;
     private final ConfigManager cm;
     private final List<FallingBlock> fallingBlocks;
@@ -35,7 +36,7 @@ public class Regeneration implements Listener {
     private final Map<UUID, Art> paintings;
     private int time;
 
-    // auto build material lists for signs, banners and shulkers
+    // auto build material lists
     List<Material> signs = Arrays.stream(Material.values())
             .filter(mat -> mat.name().endsWith("SIGN"))
             .collect(Collectors.toList());
@@ -46,6 +47,10 @@ public class Regeneration implements Listener {
 
     List<Material> shulkerBoxes = Arrays.stream(Material.values())
             .filter(mat -> mat.name().endsWith("SHULKER_BOX"))
+            .collect(Collectors.toList());
+
+    List<Material> doors = Arrays.stream(Material.values())
+            .filter(mat -> mat.name().endsWith("DOOR"))
             .collect(Collectors.toList());
 
     public Regeneration(final ExplosionRegeneration plugin) {
@@ -198,6 +203,14 @@ public class Regeneration implements Listener {
                 final Inventory inventory = lectern.getInventory();
                 cache.setInventory(inventory.getContents());
                 inventories.add(inventory);
+            } else if (doors.contains(material)) {
+                cache.setBlockData(block.getBlockData());
+                cache.setLocation(block.getLocation());
+                final Block upperDoor = block.getRelative(BlockFace.UP);
+                if (upperDoor.getType() == material) {
+                    cache.setUpperDoorBlockData(upperDoor.getBlockData());
+                    cache.setUpperDoorBlockLocation(upperDoor.getLocation());
+                }
             } else if (material == Material.CHEST || material == Material.TRAPPED_CHEST) {
                 container = (Chest) state;
             } else if (shulkerBoxes.contains(material)) {
@@ -356,7 +369,8 @@ public class Regeneration implements Listener {
                     final Material material = cache.getMaterial();
                     final Location l = cache.getLocation();
                     final Block replace = l.getBlock();
-                    replace.setType(material);
+
+                    //replace.setType(material);
                     replace.setBlockData(data);
                     final BlockState state = cache.getBlockState();
                     if (signs.contains(material)) {
@@ -366,6 +380,14 @@ public class Regeneration implements Listener {
                             sign.line(lines.indexOf(line), line);
                         }
                         sign.update();
+                    }
+                    if (doors.contains(material)) {
+                        block.setBlockData(cache.getBlockData());
+                        final Location upperDoorBlockLocation = cache.getUpperDoorBlockLocation();
+                        if (upperDoorBlockLocation != null) {
+                            final Block upperDoorBlock = upperDoorBlockLocation.getBlock();
+                            upperDoorBlock.setBlockData(cache.getUpperDoorBlockData());
+                        }
                     }
                     if (banners.contains(material)) {
                         final Banner banner = (Banner) state;
@@ -400,7 +422,7 @@ public class Regeneration implements Listener {
         this.regenerate(event.blockList(), event.getBlock().getLocation());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityExplode(final EntityExplodeEvent e) {
         Entity entity = e.getEntity();
         if (entity.getType().equals(EntityType.CREEPER)) {
@@ -496,7 +518,7 @@ public class Regeneration implements Listener {
 class ExplosionCache {
 
     private final Material material;
-    private final Location location;
+    private Location location;
     private final BlockData data;
     private String[] sign;
     private final BlockState state;
@@ -577,6 +599,38 @@ class ExplosionCache {
     public List<Component> getSignLines() {
         return this.signLines;
     }
+
+    private BlockData upperDoorBlockData;
+    private Location upperDoorBlockLocation;
+
+    public void setUpperDoorBlockData(BlockData upperDoorBlockData) {
+        this.upperDoorBlockData = upperDoorBlockData;
+    }
+
+    public BlockData getUpperDoorBlockData() {
+        return this.upperDoorBlockData;
+    }
+
+    public void setUpperDoorBlockLocation(Location upperDoorBlockLocation) {
+        this.upperDoorBlockLocation = upperDoorBlockLocation;
+    }
+
+    public Location getUpperDoorBlockLocation() {
+        return this.upperDoorBlockLocation;
+    }
+
+    public void setLocation(Location location) {
+        if(location != null)
+            this.location = location;
+    }
+
+    private BlockData blockData;
+
+    public void setBlockData(BlockData blockData) {
+        if(blockData != null)
+            this.blockData = blockData;
+    }
+
 }
 
 class ItemFrameCache {
