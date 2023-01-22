@@ -2,6 +2,7 @@ package me.foncused.explosionregeneration.event;
 
 import me.foncused.explosionregeneration.ExplosionRegeneration;
 import me.foncused.explosionregeneration.config.ConfigManager;
+import net.kyori.adventure.text.*;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.banner.Pattern;
@@ -174,7 +175,7 @@ public class Regeneration implements Listener {
             Container container = null;
             switch (material) {
                 case ACACIA_SIGN, ACACIA_WALL_SIGN, BIRCH_SIGN, BIRCH_WALL_SIGN, DARK_OAK_SIGN, DARK_OAK_WALL_SIGN, JUNGLE_SIGN, JUNGLE_WALL_SIGN, OAK_SIGN, OAK_WALL_SIGN, SPRUCE_SIGN, SPRUCE_WALL_SIGN ->
-                        cache.setSignLines(((Sign) state).getLines());
+                        cache.setSignLines(((Sign) state).lines());
                 case BLACK_BANNER, BLACK_WALL_BANNER, BLUE_BANNER, BLUE_WALL_BANNER, BROWN_BANNER, BROWN_WALL_BANNER, CYAN_BANNER, CYAN_WALL_BANNER, GRAY_BANNER, GRAY_WALL_BANNER, GREEN_BANNER, GREEN_WALL_BANNER, LIGHT_BLUE_BANNER, LIGHT_BLUE_WALL_BANNER, LIGHT_GRAY_BANNER, LIGHT_GRAY_WALL_BANNER, LIME_BANNER, LIME_WALL_BANNER, MAGENTA_BANNER, MAGENTA_WALL_BANNER, ORANGE_BANNER, ORANGE_WALL_BANNER, PINK_BANNER, PINK_WALL_BANNER, PURPLE_BANNER, PURPLE_WALL_BANNER, RED_BANNER, RED_WALL_BANNER, WHITE_BANNER, WHITE_WALL_BANNER, YELLOW_BANNER, YELLOW_WALL_BANNER -> {
                     final Banner banner = (Banner) state;
                     cache.setDyeColor(banner.getBaseColor());
@@ -349,11 +350,10 @@ public class Regeneration implements Listener {
                     switch (material) {
                         case ACACIA_SIGN, ACACIA_WALL_SIGN, BIRCH_SIGN, BIRCH_WALL_SIGN, DARK_OAK_SIGN, DARK_OAK_WALL_SIGN, JUNGLE_SIGN, JUNGLE_WALL_SIGN, OAK_SIGN, OAK_WALL_SIGN, SPRUCE_SIGN, SPRUCE_WALL_SIGN -> {
                             final Sign sign = (Sign) state;
-                            final String[] lines = cache.getSignLines();
-                            sign.setLine(0, lines[0]);
-                            sign.setLine(1, lines[1]);
-                            sign.setLine(2, lines[2]);
-                            sign.setLine(3, lines[3]);
+                            final List<Component> lines = cache.getSignLines();
+                            for (Component line : lines) {
+                                sign.line(lines.indexOf(line), line);
+                            }
                             sign.update();
                         }
                         case BLACK_BANNER, BLACK_WALL_BANNER, BLUE_BANNER, BLUE_WALL_BANNER, BROWN_BANNER, BROWN_WALL_BANNER, CYAN_BANNER, CYAN_WALL_BANNER, GRAY_BANNER, GRAY_WALL_BANNER, GREEN_BANNER, GREEN_WALL_BANNER, LIGHT_BLUE_BANNER, LIGHT_BLUE_WALL_BANNER, LIGHT_GRAY_BANNER, LIGHT_GRAY_WALL_BANNER, LIME_BANNER, LIME_WALL_BANNER, MAGENTA_BANNER, MAGENTA_WALL_BANNER, ORANGE_BANNER, ORANGE_WALL_BANNER, PINK_BANNER, PINK_WALL_BANNER, PURPLE_BANNER, PURPLE_WALL_BANNER, RED_BANNER, RED_WALL_BANNER, WHITE_BANNER, WHITE_WALL_BANNER, YELLOW_BANNER, YELLOW_WALL_BANNER -> {
@@ -530,14 +530,6 @@ class ExplosionCache {
         return this.data;
     }
 
-    String[] getSignLines() {
-        return this.sign;
-    }
-
-    void setSignLines(final String[] sign) {
-        this.sign = sign;
-    }
-
     BlockState getBlockState() {
         return this.state;
     }
@@ -566,6 +558,15 @@ class ExplosionCache {
         this.patterns = patterns;
     }
 
+    private List<Component> signLines;
+
+    public void setSignLines(List<Component> lines) {
+        this.signLines = lines;
+    }
+
+    public List<Component> getSignLines() {
+        return this.signLines;
+    }
 }
 
 class ItemFrameCache {

@@ -1,6 +1,6 @@
 name: ExplosionRegeneration
 main: me.foncused.explosionregeneration.ExplosionRegeneration
-version: 1.4.8
+version: '${version}'
 author: foncused, Envel
 api-version: 1.19
 
