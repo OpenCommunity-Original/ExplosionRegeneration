@@ -2,12 +2,11 @@ package me.foncused.explosionregeneration.event;
 
 import me.foncused.explosionregeneration.ExplosionRegeneration;
 import me.foncused.explosionregeneration.config.ConfigManager;
-import net.kyori.adventure.text.*;
+import me.foncused.explosionregeneration.core.*;
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.block.*;
-import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.type.Door;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,7 +23,8 @@ import org.bukkit.util.Vector;
 
 import java.util.Comparator;
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static me.foncused.explosionregeneration.data.MaterialLists.*;
 
 public class Regeneration implements Listener {
     private final ExplosionRegeneration plugin;
@@ -35,23 +35,6 @@ public class Regeneration implements Listener {
     private final Map<UUID, ItemFrameCache> itemFrames;
     private final Map<UUID, Art> paintings;
     private int time;
-
-    // auto build material lists
-    List<Material> signs = Arrays.stream(Material.values())
-            .filter(mat -> mat.name().endsWith("SIGN"))
-            .collect(Collectors.toList());
-
-    List<Material> banners = Arrays.stream(Material.values())
-            .filter(mat -> mat.name().endsWith("BANNER"))
-            .collect(Collectors.toList());
-
-    List<Material> shulkerBoxes = Arrays.stream(Material.values())
-            .filter(mat -> mat.name().endsWith("SHULKER_BOX"))
-            .collect(Collectors.toList());
-
-    List<Material> doors = Arrays.stream(Material.values())
-            .filter(mat -> mat.name().endsWith("DOOR"))
-            .collect(Collectors.toList());
 
     public Regeneration(final ExplosionRegeneration plugin) {
         this.plugin = plugin;
@@ -414,7 +397,7 @@ public class Regeneration implements Listener {
         list.forEach(block -> block.setType(Material.AIR));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockExplode(final BlockExplodeEvent event) {
         if (!(this.cm.isDropsEnabled())) {
             event.setYield(0F);
@@ -511,147 +494,6 @@ public class Regeneration implements Listener {
                 }
             }
         }
-    }
-
-}
-
-class ExplosionCache {
-
-    private final Material material;
-    private Location location;
-    private final BlockData data;
-    private String[] sign;
-    private final BlockState state;
-    private ItemStack[] inventory;
-    private DyeColor color;
-    private List<Pattern> patterns;
-
-    ExplosionCache(final Material material, final Location location, final BlockData data, final BlockState state) {
-        this(material, location, data, state, null, null, null, null);
-    }
-
-    private ExplosionCache(
-            final Material material,
-            final Location location,
-            final BlockData data,
-            final BlockState state,
-            final String[] sign,
-            final ItemStack[] inventory,
-            final DyeColor color,
-            final List<Pattern> patterns
-    ) {
-        this.material = material;
-        this.location = location;
-        this.data = data;
-        this.state = state;
-        this.sign = sign;
-        this.inventory = inventory;
-        this.color = color;
-        this.patterns = patterns;
-    }
-
-    Material getMaterial() {
-        return this.material;
-    }
-
-    Location getLocation() {
-        return this.location;
-    }
-
-    BlockData getBlockData() {
-        return this.data;
-    }
-
-    BlockState getBlockState() {
-        return this.state;
-    }
-
-    ItemStack[] getInventory() {
-        return this.inventory;
-    }
-
-    void setInventory(final ItemStack[] inventory) {
-        this.inventory = inventory;
-    }
-
-    DyeColor getDyeColor() {
-        return this.color;
-    }
-
-    void setDyeColor(final DyeColor color) {
-        this.color = color;
-    }
-
-    List<Pattern> getPatterns() {
-        return this.patterns;
-    }
-
-    void setPatterns(final List<Pattern> patterns) {
-        this.patterns = patterns;
-    }
-
-    private List<Component> signLines;
-
-    public void setSignLines(List<Component> lines) {
-        this.signLines = lines;
-    }
-
-    public List<Component> getSignLines() {
-        return this.signLines;
-    }
-
-    private BlockData upperDoorBlockData;
-    private Location upperDoorBlockLocation;
-
-    public void setUpperDoorBlockData(BlockData upperDoorBlockData) {
-        this.upperDoorBlockData = upperDoorBlockData;
-    }
-
-    public BlockData getUpperDoorBlockData() {
-        return this.upperDoorBlockData;
-    }
-
-    public void setUpperDoorBlockLocation(Location upperDoorBlockLocation) {
-        this.upperDoorBlockLocation = upperDoorBlockLocation;
-    }
-
-    public Location getUpperDoorBlockLocation() {
-        return this.upperDoorBlockLocation;
-    }
-
-    public void setLocation(Location location) {
-        if(location != null)
-            this.location = location;
-    }
-
-    private BlockData blockData;
-
-    public void setBlockData(BlockData blockData) {
-        if(blockData != null)
-            this.blockData = blockData;
-    }
-
-}
-
-class ItemFrameCache {
-
-    private final ItemStack stack;
-    private final Rotation rotation;
-
-    ItemFrameCache(
-            final ItemStack stack,
-            final Rotation rotation
-    ) {
-        this.stack = stack;
-        this.rotation = rotation;
-    }
-
-    ItemStack getItem() {
-        return this.stack;
-    }
-
-    Rotation getRotation() {
-        return this.rotation;
     }
 
 }

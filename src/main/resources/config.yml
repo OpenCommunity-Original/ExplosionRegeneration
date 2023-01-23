@@ -37,7 +37,7 @@ blacklist:
   - "world_the_end"
 
 # Entity protection (Armor Stands, Item Frames, Paintings)
-entity-protection: false
+entityProtection: false
 
 # Should item drops from explosions be enabled?
 drops:
